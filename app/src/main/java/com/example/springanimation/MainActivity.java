@@ -47,6 +47,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 view.setY(event.getRawY() + dY);
                 view.setX(event.getRawX() + dX);
                 lastAction = MotionEvent.ACTION_MOVE;
+                float length = event.getRawY() - previous_location;
+                backToInitialPosition(circle,length);
 
                 break;
 
@@ -59,5 +61,12 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 return false;
         }
         return true;
+    }
+
+    public void backToInitialPosition(View view,float length){
+        SpringAnimation springAnimation = new SpringAnimation(view,DynamicAnimation.TRANSLATION_Y,-length);    // above view y is negative and below view it's positive
+        springAnimation.getSpring().setDampingRatio(SpringForce.DAMPING_RATIO_HIGH_BOUNCY);       // property to add bounce to the object when
+        springAnimation.getSpring().setStiffness(SpringForce.STIFFNESS_LOW);                   // property to denote that how fast return to the final state -> high to low means fast to slow
+        springAnimation.start();
     }
 }
